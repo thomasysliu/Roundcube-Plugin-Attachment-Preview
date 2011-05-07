@@ -24,7 +24,7 @@
  *      MA 02110-1301, USA.
  */
 
-class attachment-preview extends rcube_plugin
+class attachment_preview extends rcube_plugin
 {
   public $task = 'mail';
 
