@@ -16,7 +16,8 @@ if (window.rcmail) {
 
 				}
 
+				}
 				});
 			})
-	}
+}
 
