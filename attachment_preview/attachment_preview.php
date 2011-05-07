@@ -32,7 +32,7 @@ class attachment_preview extends rcube_plugin
   {
     $rcmail = rcmail::get_instance();
     if($rcmail->action == 'compose') {
-      $this->include_script('attachment-preview.js');
+      $this->include_script('attachment_preview.js');
       $this->add_texts('localization/', true);
     }
 
