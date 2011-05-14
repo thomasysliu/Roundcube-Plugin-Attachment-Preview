@@ -142,7 +142,6 @@ class attachment_preview extends rcube_plugin
 			break;
 			case "jpg":
 				case "jpeg":
-				//print "jpg";
 				$src = imagecreatefromjpeg($attachment);
 			break;
 			case "bmp":
