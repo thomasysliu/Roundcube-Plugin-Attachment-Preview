@@ -151,11 +151,24 @@ class attachment_preview extends rcube_plugin
 				$src = imagecreatefromgif($attachment);
 			break;
 			case "xpm":
-				$src = imagecreatefromxpm($attachment);
-			break;
+				if(imagetypes() & IMG_XPM){
+					$src = imagecreatefromxpm($attachment);
+					break;
+				}else{
+					header('Content-type: image/gif');
+					echo base64_decode('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
+					exit;
+				}
+
 			case "xbm":
-				$src = imagecreatefromxbm($attachment);
-			break;
+				if(imagetypes() & IMG_XBM){
+					$src = imagecreatefromxbm($attachment);
+					break;
+				}else{
+					header('Content-type: image/gif');
+					echo base64_decode('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
+					exit;
+				}
 			case "gd2":
 				$src = imagecreatefromgd2($attachment);
 			break;
@@ -165,6 +178,7 @@ class attachment_preview extends rcube_plugin
 			default:
 			header('Content-type: image/gif');
 			echo base64_decode('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
+			exit;
 			break;
 		}
 
