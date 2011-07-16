@@ -209,7 +209,12 @@ class attachment_preview extends rcube_plugin
 
 		$RCMAIL = rcmail::get_instance();
 		$COMPOSE_ID = get_input_value('_id', RCUBE_INPUT_GPC);
-		$_SESSION['compose'] = $_SESSION['compose_data'][$COMPOSE_ID];
+		if( isset( $_SESSION['compose_data'] ) ){
+			$_SESSION['compose'] = $_SESSION['compose_data'][$COMPOSE_ID]; // After roundcube version 4542 
+		}
+		else{
+			$_SESSION['compose']['id'] = $COMPOSE_ID;  // Before roundcube version 4542
+		}
 		if (preg_match('/^rcmfile(\w+)$/', $_GET['_file'], $regs))
 			$id = $regs[1];
 
