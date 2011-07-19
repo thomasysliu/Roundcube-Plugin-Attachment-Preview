@@ -13,7 +13,7 @@ if (window.rcmail) {
 				for (i=0; i<list.length; i++){
 
 				list[i].style.height="auto";
-				var url = rcmail.env.comm_path+'&_action=display-attachment&_file='+list[i].id+'&_id='+rcmail.env.compose_id;
+				var url = rcmail.env.comm_path+'&_action=plugin.download&_file='+list[i].id+'&_id='+rcmail.env.compose_id;
 				var img_url = rcmail.env.comm_path+'&_action=plugin.preview&_file='+list[i].id+'&_id='+rcmail.env.compose_id;
 				list[i].innerHTML = list[i].innerHTML.replace(/\<\/a\>/, '</a><a href="'+url+'">');
 				begin=rcmail.gui_objects.attachmentlist.getElementsByTagName("a");
@@ -27,7 +27,7 @@ if (window.rcmail) {
 	rcmail.ori_add2attachment_list=rcmail.add2attachment_list;
 	rcmail.add2attachment_list = function(name, att, upload_id) {
 		if(att.complete){
-			var url = rcmail.env.comm_path+'&_action=display-attachment&_file='+name+'&_id='+rcmail.env.compose_id;
+			var url = rcmail.env.comm_path+'&_action=plugin.download&_file='+name+'&_id='+rcmail.env.compose_id;
 			var img_url = rcmail.env.comm_path+'&_action=plugin.preview&_file='+name+'&_id='+rcmail.env.compose_id;
 			att.html = att.html.replace(/\<\/a\>/, '</a><a href="'+url+'">');
 			att.html += '</a><div><img src="'+img_url+'"></div>';

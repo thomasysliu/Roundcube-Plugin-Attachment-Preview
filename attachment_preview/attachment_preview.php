@@ -37,6 +37,7 @@ class attachment_preview extends rcube_plugin
 			$this->add_texts('localization/', true);
 		}
 		$this->register_action('plugin.preview', array($this, 'preview'));
+		$this->register_action('plugin.download', array($this, 'download'));
 
 	}
 	//From http://php.net/manual/en/function.imagecreatefromwbmp.php
@@ -231,6 +232,56 @@ class attachment_preview extends rcube_plugin
 		}
 
 
+		exit;
+	}
+	function download()
+	{
+
+		$RCMAIL = rcmail::get_instance();
+		$COMPOSE_ID = get_input_value('_id', RCUBE_INPUT_GPC);
+		if( isset( $_SESSION['compose_data'] ) ){
+			$_SESSION['compose'] = $_SESSION['compose_data'][$COMPOSE_ID]; // After roundcube version 4542 
+		}
+		else{
+			$_SESSION['compose']['id'] = $COMPOSE_ID;  // Before roundcube version 4542
+		}
+		if (preg_match('/^rcmfile(\w+)$/', $_GET['_file'], $regs))
+			$id = $regs[1];
+
+		if ($attachment = $_SESSION['compose']['attachments'][$id])
+			$attachment = $RCMAIL->plugins->exec_hook('attachment_display', $attachment);
+
+		if ($attachment['status']) {
+			if (empty($attachment['size']))
+				$attachment['size'] = $attachment['data'] ? strlen($attachment['data']) : @filesize($attachment['path']);
+
+
+			if (file_exists($attachment['path'])) {
+				$ua = $_SERVER["HTTP_USER_AGENT"]; 
+				$filename = $attachment['name'];
+				$encoded_filename = urlencode($filename); 
+				$encoded_filename = str_replace("+", "%20", $encoded_filename); 
+				header('Content-Description: File Transfer');
+				header('Content-Type: application/octet-stream');
+				if (preg_match("/MSIE/", $ua)) { 
+					header('Content-Disposition: attachment; filename="' . $encoded_filename . '"'); 
+				} else if (preg_match("/Firefox/", $ua)) { 
+					header('Content-Disposition: attachment; filename*="utf8\'\'' . $filename . '"'); 
+				} else { 
+					header('Content-Disposition: attachment; filename="' . $filename . '"'); 
+				}
+				header('Content-Transfer-Encoding: binary');
+				header('Expires: 0');
+				header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+				header('Pragma: public');
+				header('Content-Length: ' . filesize( $attachment['path'] ));
+				ob_clean();
+				flush();
+				readfile($attachment['path']);
+
+			}
+
+		}
 		exit;
 	}
 }
